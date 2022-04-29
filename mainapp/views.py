@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.conf import settings
 from django.http import Http404
+from .models import BlogPost
+from django.shortcuts import get_object_or_404
 
 from datetime import datetime
 ALL_POSTS = [
@@ -23,7 +25,7 @@ ALL_POSTS = [
 ]
 
 def index(request):
-    posts = ALL_POSTS
+    posts = BlogPost.objects.all()
     return render(request, 'mainapp/index.html', {'posts':posts})
 
 def post(request, id):
@@ -31,4 +33,4 @@ def post(request, id):
         post = ALL_POSTS[id]
     except IndexError:
         raise Http404("Post does not exist")
-    return render(request, 'mainapp/post.html', {'object': post})
+    return get_object_or_404(BlogPost, pk=id)
